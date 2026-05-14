@@ -4,11 +4,9 @@ import { Sparkles } from 'lucide-react'
 
 interface AISummaryProps {
   emailId: string
-  subject: string
-  body: string
 }
 
-export function AISummary({ emailId, subject, body }: AISummaryProps) {
+export function AISummary({ emailId }: AISummaryProps) {
   const mockSummaries: Record<string, string> = {
     '1': `This email from Sarah Johnson discusses the Q4 marketing strategy review. Key points include a 25% increase in social media budget, a new influencer partnership program, enhanced SEO targeting, and an email marketing automation upgrade. Sarah is requesting feedback and wants to schedule a call tomorrow.`,
     '2': `A pull request has been opened by @dev-user to add AI summarization features. The PR includes Claude API integration, summary generation UI, caching mechanism, and error handling.`,

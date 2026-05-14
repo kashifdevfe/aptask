@@ -90,7 +90,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Priority Inbox</h3>
                 <p className="text-gray-600">
-                  AI prioritizes your emails so you never miss what's important again.
+                  AI prioritizes your emails so you never miss what is important again.
                 </p>
               </div>
             </div>

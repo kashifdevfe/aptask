@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Star, StarOff, Reply, Forward, Archive, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { AISummary } from '@/features/ai/components/AISummary'
 import { AIReplySuggestions } from '@/features/ai/components/AIReplySuggestions'
 import { cn } from '@/lib/utils'
@@ -169,8 +169,6 @@ export function EmailDetail({
           <div className="space-y-8">
             <AISummary 
               emailId={email.id}
-              subject={email.subject}
-              body={email.body}
             />
 
             <AIReplySuggestions emailId={email.id} />
