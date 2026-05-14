@@ -1,14 +1,19 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Menu, Search, Plus, Mail, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useAuthStore } from '@/features/auth/stores/auth-store'
+import { AccountSwitcher } from '@/features/auth/components/AccountSwitcher'
 import { useInboxStore } from '@/features/inbox/stores/inbox-store'
 import { EmailListItem } from '@/features/inbox/components/EmailListItem'
 import { EmailDetail } from '@/features/inbox/components/EmailDetail'
 import { ComposeModal } from '@/features/compose/components/ComposeModal'
 
 export default function InboxPage() {
+  const router = useRouter()
+  const { isAuthenticated } = useAuthStore()
   const {
     emails,
     selectedEmail,
@@ -31,8 +36,12 @@ export default function InboxPage() {
   }>()
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login')
+      return
+    }
     loadMockData()
-  }, [loadMockData])
+  }, [isAuthenticated, loadMockData, router])
 
   const filteredEmails = emails.filter((email) => {
     if (!searchQuery) return true
@@ -82,6 +91,10 @@ export default function InboxPage() {
     setIsComposeOpen(true)
   }
 
+  const handleAddAccount = () => {
+    router.push('/login')
+  }
+
   const handleReply = () => {
     if (selectedEmail) {
       setComposeMode('reply')
@@ -103,6 +116,10 @@ export default function InboxPage() {
       })
       setIsComposeOpen(true)
     }
+  }
+
+  if (!isAuthenticated) {
+    return null
   }
 
   return (
@@ -179,6 +196,7 @@ export default function InboxPage() {
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">Compose</span>
           </Button>
+          <AccountSwitcher onAddAccount={handleAddAccount} />
         </div>
       </header>
 

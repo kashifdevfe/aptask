@@ -2,6 +2,21 @@
 
 A modern, AI-first universal email client built as a mobile-ready PWA. Experience the future of email with intelligent AI features.
 
+## 🎯 Two Modes Available
+
+### **Demo Mode (Default - Best for Evaluation)**
+- ✅ No setup required - works immediately
+- ✅ Complete inbox with mock emails
+- ✅ All AI features fully functional
+- ✅ Perfect for quick evaluation
+
+### **Real OAuth Mode (For Production)**
+- ✅ Full Google OAuth 2.0 integration
+- ✅ Full Microsoft Azure AD OAuth 2.0 integration
+- ✅ Real Gmail API integration
+- ✅ Real Outlook/Office 365 API integration
+- ✅ Complete token lifecycle management
+
 ## Features
 
 ### Core Email Features
@@ -12,6 +27,7 @@ A modern, AI-first universal email client built as a mobile-ready PWA. Experienc
 - ✅ **Archive / Delete** - Manage your emails effectively
 - ✅ **Star Emails** - Mark important emails
 - ✅ **Read/Unread** - Track which emails you've read
+- ✅ **Account Switching** - Switch between multiple email accounts
 
 ### AI-First Features
 - ✅ **AI Summaries** - Intelligent email summarization
@@ -19,10 +35,10 @@ A modern, AI-first universal email client built as a mobile-ready PWA. Experienc
 - ✅ **Priority Inbox** - AI-prioritized emails (high/medium/low)
 - ✅ **Deep AI Integration** - AI features at the core of the experience
 
-### Email Provider Support (Architecture Ready)
-- 📧 Gmail (OAuth ready)
-- 📧 Office 365 (Microsoft Graph ready)
-- 📧 IMAP (Yahoo, AOL, etc.)
+### Email Provider Support
+- 📧 Gmail (OAuth & Demo)
+- 📧 Office 365 (OAuth & Demo)
+- 📧 IMAP (Yahoo, AOL, etc. - Demo)
 
 ### User Experience
 - 📱 **Mobile-First Design** - Fully responsive from mobile to desktop
@@ -43,12 +59,22 @@ A modern, AI-first universal email client built as a mobile-ready PWA. Experienc
 - **Zustand** - Simple, fast state management
 - **React Query** - Data fetching (ready for integration)
 
-### AI (Ready for Integration)
-- Claude API or OpenAI API
+### AI (Complete Implementation)
+- **Anthropic Claude API** - Complete implementation
+- **AI Summaries** - Intelligent email summarization
+- **AI Reply Suggestions** - Smart reply generation
+- **Priority Classification** - AI-based priority detection
+- **Hybrid Mode** - Real Claude + Mock fallback
 
-### Authentication (Ready for Integration)
-- Google OAuth
-- Microsoft OAuth
+### Authentication (Complete Implementation)
+- **Google OAuth 2.0** - Full implementation
+- **Microsoft OAuth 2.0** - Full implementation
+- **Token Management** - Access/refresh token lifecycle
+
+### Email Services (Complete Implementation)
+- **Gmail API** - Full email operations
+- **Outlook API** - Full email operations
+- **Unified Service** - Single interface for all providers
 
 ### PWA
 - **next-pwa** - Progressive Web App support
@@ -63,11 +89,7 @@ A modern, AI-first universal email client built as a mobile-ready PWA. Experienc
 
 ## Getting Started
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
+### Quick Start (Demo Mode - No Setup!)
 
 1. Install dependencies:
 ```bash
@@ -80,6 +102,12 @@ npm run dev
 ```
 
 3. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. Select **Demo Mode** (default) and connect any provider
+5. That's it! Everything works immediately!
+
+### Real OAuth Setup (Optional)
+
+See [SETUP_GUIDE.md](SETUP_GUIDE.md) for complete real OAuth setup instructions.
 
 ### Available Scripts
 
@@ -129,14 +157,21 @@ APTASK/
 ├── src/
 │   ├── app/                 # Next.js App Router
 │   │   ├── page.tsx         # Home page
+│   │   ├── login/page.tsx   # Login page (Demo + OAuth)
 │   │   ├── inbox/page.tsx   # Inbox page
 │   │   ├── layout.tsx
-│   │   └── globals.css
+│   │   ├── globals.css
+│   │   └── api/
+│   │       └── auth/        # OAuth API routes
+│   │           ├── google/
+│   │           ├── azure-ad/
+│   │           └── callback/
 │   ├── components/
 │   │   └── ui/              # shadcn/ui components
 │   ├── features/            # Feature-based modules
 │   │   ├── auth/
-│   │   │   └── stores/
+│   │   │   ├── stores/
+│   │   │   └── components/
 │   │   ├── inbox/
 │   │   │   ├── stores/
 │   │   │   └── components/
@@ -145,9 +180,18 @@ APTASK/
 │   │   └── ai/
 │   │       └── components/
 │   ├── lib/                 # Utilities
+│   │   ├── oauth/           # OAuth implementation
+│   │   │   ├── config.ts
+│   │   │   ├── server.ts
+│   │   │   └── client.ts
+│   │   └── email/           # Email services
+│   │       ├── gmail-service.ts
+│   │       ├── outlook-service.ts
+│   │       └── unified-service.ts
 │   └── types/               # TypeScript definitions
 ├── public/
 │   └── manifest.json        # PWA manifest
+├── SETUP_GUIDE.md          # Real OAuth setup guide
 ├── CLAUDE.md                # Claude Code project doc
 ├── architecture.md          # Architecture documentation
 ├── one-page-architecture.md # One-page architecture summary
@@ -158,6 +202,7 @@ APTASK/
 ├── tailwind.config.js
 ├── tsconfig.json
 ├── next.config.js
+├── .env.example             # Environment variables template
 ├── package.json
 └── README.md
 ```

@@ -1,53 +1,64 @@
 'use client'
 
-import { Sparkles } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Sparkles, Loader2 } from 'lucide-react'
+import { useInboxStore } from '@/features/inbox/stores/inbox-store'
+import { useAIStore } from '@/features/ai/stores/ai-store'
+import { useComposeStore } from '@/features/compose/stores/compose-store'
 
 interface AIReplySuggestionsProps {
   emailId: string
 }
 
 export function AIReplySuggestions({ emailId }: AIReplySuggestionsProps) {
-  const suggestions: Record<string, string[]> = {
-    '1': [
-      'Thanks for sharing this, Sarah! The strategy looks solid. I\'ll review today and we can discuss tomorrow at 2 PM.',
-      'Great work on the Q4 strategy! I have a few thoughts on the influencer program - can we hop on a quick call?',
-      'This looks excellent. I\'ve added my comments inline. Let\'s proceed with the proposed budget increase.',
-    ],
-    '2': [
-      'Thanks for the PR! I\'ll review it today and get back to you.',
-      'Great work! Left a few minor comments, otherwise looks good to merge.',
-      'Excellent implementation! Let\'s get this merged and deploy to staging.',
-    ],
-    '3': [
-      'Thanks for the update! Looking forward to receiving the package.',
-      'Excited for the delivery! Will keep an eye out for it.',
-    ],
-    '4': [
-      'Looking forward to it! No dietary restrictions for me.',
-      'Can\'t wait! Just a heads up - I\'m vegetarian.',
-      'Sounds great! I should be there on time.',
-    ],
-    '5': [
-      'Thanks for the recommendations! The Crown sounds perfect for the weekend.',
-    ],
-  }
+  const { emails } = useInboxStore()
+  const { generateReplySuggestions, isLoading, useMockAI } = useAIStore()
+  const { openCompose } = useComposeStore()
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [hasGenerated, setHasGenerated] = useState(false)
 
-  const emailSuggestions = suggestions[emailId] || [
-    'Thanks for your email! I\'ll get back to you soon.',
-    'Got it, thanks!',
-  ]
+  const email = emails.find(e => e.id === emailId)
+
+  useEffect(() => {
+    if (email && !hasGenerated) {
+      const generate = async () => {
+        const result = await generateReplySuggestions(
+          email.subject,
+          email.body,
+          email.from.name
+        )
+        setSuggestions(result)
+        setHasGenerated(true)
+      }
+      generate()
+    }
+  }, [email, hasGenerated, generateReplySuggestions])
+
+  const handleSuggestionClick = (suggestion: string) => {
+    if (email) {
+      openCompose('reply', email, suggestion)
+    }
+  }
 
   return (
     <div className="mb-6">
       <div className="flex items-center gap-2 mb-3">
         <Sparkles className="h-5 w-5 text-green-600" />
         <span className="font-semibold text-gray-900">AI Reply Suggestions</span>
+        {isLoading && (
+          <div className="flex items-center gap-1 ml-2">
+            <Loader2 className="h-3 w-3 text-green-600 animate-spin" />
+            <span className="text-xs text-green-700">
+              {useMockAI ? 'Simulating' : 'Generating'}...
+            </span>
+          </div>
+        )}
       </div>
       <div className="space-y-2">
-        {emailSuggestions.map((suggestion, index) => (
+        {suggestions.map((suggestion, index) => (
           <button
             key={index}
-            onClick={() => alert(`Reply suggestion selected! Opening composer...`)}
+            onClick={() => handleSuggestionClick(suggestion)}
             className="w-full text-left p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-green-300 transition-colors text-sm text-gray-700 cursor-pointer"
           >
             {suggestion}
